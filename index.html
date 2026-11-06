@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVACORE ESTUDIO | Planes de Desarrollo Web y Cotizador Interactivo</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter, Space Grotesk & Cinzel for the metallic NOVACORE serif title -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nova: {
+                            bg: '#0B0B0B',       /* Fondo principal negro obsidiana */
+                            surface: '#1A1A1A',  /* Tarjetas y contenedores elevados */
+                            border: '#333333',   /* Bordes, divisores y elementos secundarios */
+                            muted: '#6B6B6B',    /* Texto secundario y etiquetas */
+                            body: '#D9D9D9',     /* Texto principal plata claro */
+                            white: '#FFFFFF',    /* Títulos, bordes activos y botones primarios */
+                            gold: '#E2C792',     /* Acento dorado de los flyers oficiales */
+                            goldDark: '#A68956'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        serifBrand: ['Cinzel', 'serif']
+                    },
+                    boxShadow: {
+                        'glow-white': '0 0 28px rgba(255, 255, 255, 0.15)',
+                        'glow-subtle': '0 0 20px rgba(255, 255, 255, 0.06)',
+                        'glow-gold': '0 0 24px rgba(226, 199, 146, 0.16)',
+                        'chat-float': '0 20px 50px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 255, 255, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0B0B;
+            color: #D9D9D9;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Subtle dark stone/obsidian radial background */
+        .bg-obsidian-radial {
+            background: 
+                radial-gradient(circle at 50% 0%, rgba(51, 51, 51, 0.32) 0%, rgba(11, 11, 11, 0.96) 68%),
+                linear-gradient(180deg, #0B0B0B 0%, #121212 50%, #0B0B0B 100%);
+        }
+
+        /* Metallic Silver 3D Gradient Text for NOVACORE main title */
+        .text-novacore-silver {
+            background: linear-gradient(180deg, #FFFFFF 0%, #E8E8E8 48%, #9A9A9A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.85));
+        }
+
+        /* Seamless blending if user uploads a custom JPG/PNG logo with dark background */
+        .custom-logo-blend {
+            mix-blend-mode: screen;
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 98%);
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 98%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0B0B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333333;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6B6B6B;
+        }
+
+        /* Active Plan Card Glow */
+        .plan-card-selected {
+            border-color: #FFFFFF !important;
+            box-shadow: 0 0 32px rgba(255, 255, 255, 0.16), inset 0 0 0 1px #FFFFFF;
+            transform: translateY(-3px);
+        }
+
+        /* Smooth transitions */
+        .transition-nova {
+            transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Pulse dot for live assistant */
+        @keyframes softPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.9); }
+        }
+        .animate-soft-pulse {
+            animation: softPulse 2.2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-obsidian-radial min-h-screen pb-24 lg:pb-0 selection:bg-nova-white selection:text-nova-bg">
+
+    <!-- ==========================================
+         TOP NAVBAR (COMPACT & MOBILE-FIRST)
+    =========================================== -->
+    <header class="sticky top-0 z-30 backdrop-blur-xl bg-nova-bg/90 border-b border-nova-border">
+        <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
+            <!-- Brand Logo with Crisp White/Silver Novacore Monogram -->
+            <a href="#" class="flex items-center gap-2.5 sm:gap-3.5 group shrink-0">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-nova-surface border border-nova-border flex items-center justify-center group-hover:border-nova-white transition-nova overflow-hidden p-1">
+                    <div class="novacore-vector-slot w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"></div>
+                </div>
+                <div>
+                    <span class="font-serifBrand font-bold text-base sm:text-xl tracking-[0.14em] text-nova-white block leading-none">NOVACORE</span>
+                    <span class="text-[9px] sm:text-[10px] uppercase tracking-[0.18em] text-nova-muted block mt-1">Diseño Web • Apps • Catálogos</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center gap-6 text-xs lg:text-sm font-medium text-nova-body">
+                <a href="#que-hacemos" class="hover:text-nova-white transition-colors">Qué Hacemos</a>
+                <a href="#planes" class="hover:text-nova-white transition-colors">Planes Web</a>
+                <a href="#extras" class="hover:text-nova-white transition-colors">Agregar Extras</a>
+                <button type="button" onclick="toggleBotChat(true)" class="hover:text-nova-white transition-colors flex items-center gap-1.5 bg-nova-surface px-3 py-1.5 rounded-lg border border-nova-border">
+                    <span class="w-2 h-2 rounded-full bg-nova-gold animate-soft-pulse"></span>
+                    <span>Asesor Bot</span>
+                </button>
+            </nav>
+
+            <!-- Right Action: Live Subtotal Pill -->
+            <div class="flex items-center gap-2">
+                <a href="#resumen-cotizacion" class="bg-nova-surface hover:bg-nova-border/70 border border-nova-border rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2.5 transition-nova">
+                    <div class="text-right">
+                        <span class="block text-[9px] sm:text-[10px] uppercase tracking-wider text-nova-muted leading-none">Subtotal Estimado</span>
+                        <span id="nav-subtotal" class="font-display font-bold text-xs sm:text-base text-nova-white">$5,500 MXN</span>
+                    </div>
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-nova-white text-nova-bg flex items-center justify-center font-bold">
+                        <i data-lucide="shopping-bag" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ==========================================
+             1. HERO OFICIAL NOVACORE ESTUDIO
+        =========================================== -->
+        <section id="que-hacemos" class="relative pt-6 pb-10 sm:pt-12 sm:pb-16 border-b border-nova-border/70 overflow-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+                <!-- Official Novacore Astrolabe Coordinate Grid + Crisp White & Silver Monogram -->
+                <div class="relative mx-auto w-56 h-56 sm:w-72 sm:h-72 flex items-center justify-center mb-3 sm:mb-5 select-none">
+                    <!-- Blueprint Coordinate Grid & Orbit SVG -->
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-85" viewBox="0 0 420 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="#333333" stroke-width="0.85" opacity="0.65">
+                            <line x1="30" y1="50" x2="390" y2="50"/><line x1="30" y1="95" x2="390" y2="95"/>
+                            <line x1="30" y1="140" x2="390" y2="140"/><line x1="30" y1="185" x2="390" y2="185"/>
+                            <line x1="30" y1="230" x2="390" y2="230"/><line x1="30" y1="275" x2="390" y2="275"/>
+                            <line x1="75" y1="20" x2="75" y2="310"/><line x1="120" y1="20" x2="120" y2="310"/>
+                            <line x1="165" y1="20" x2="165" y2="310"/><line x1="210" y1="10" x2="210" y2="325"/>
+                            <line x1="255" y1="20" x2="255" y2="310"/><line x1="300" y1="20" x2="300" y2="310"/>
+                            <line x1="345" y1="20" x2="345" y2="310"/>
+                        </g>
+                        <!-- Dashed Astrolabe Outer Rings -->
+                        <circle cx="210" cy="170" r="126" stroke="#6B6B6B" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.7" />
+                        <circle cx="210" cy="170" r="105" stroke="#333333" stroke-width="1" opacity="0.8" />
+                        <!-- Tilted Elliptical Orbit with Bright Nodes -->
+                        <ellipse cx="210" cy="170" rx="134" ry="62" transform="rotate(-32 210 170)" stroke="#D9D9D9" stroke-width="1.2" opacity="0.75" />
+                        <circle cx="305" cy="96" r="4" fill="#FFFFFF" />
+                        <circle cx="115" cy="244" r="3.5" fill="#FFFFFF" />
+                        <!-- Coordinate Labels -->
+                        <g fill="#9A9A9A" font-family="monospace" font-size="7.5" letter-spacing="0.06em">
+                            <text x="128" y="68">0.0:0:03</text>
+                            <text x="275" y="62">+40.000440</text>
+                            <text x="86" y="128">-120.004800</text>
+                            <text x="294" y="122">+60.203820</text>
+                            <text x="80" y="164">37.2720.12</text>
+                            <text x="288" y="218">+4.055.239059</text>
+                            <text x="275" y="272">-1000.701025</text>
+                        </g>
+                    </svg>
+
+                    <!-- Crisp White & Silver Novacore Monogram Emblem -->
+                    <div class="relative z-10 w-36 h-36 sm:w-44 sm:h-44 flex items-center justify-center">
+                        <div class="novacore-vector-slot w-full h-full flex items-center justify-center"></div>
+                    </div>
+                </div>
+
+                <!-- Metallic Silver Serif Brand Title: NOVACORE -->
+                <h1 class="font-serifBrand font-bold text-3xl sm:text-6xl lg:text-7xl tracking-[0.18em] text-novacore-silver uppercase leading-none mb-3">
+                    NOVACORE
+                </h1>
+
+                <!-- Divider with Services Subtitle -->
+                <div class="flex items-center justify-center gap-2 sm:gap-4 max-w-2xl mx-auto mb-2.5">
+                    <span class="h-[1px] w-6 sm:w-16 bg-gradient-to-r from-transparent to-nova-muted"></span>
+                    <p class="font-display font-semibold text-[10px] sm:text-xs md:text-sm tracking-[0.16em] text-nova-body uppercase">
+                        DISEÑO WEB • APPS MÓVILES • CATÁLOGOS • SOLUCIONES DIGITALES
+                    </p>
+                    <span class="h-[1px] w-6 sm:w-16 bg-gradient-to-l from-transparent to-nova-muted"></span>
+                </div>
+
+                <!-- Tagline -->
+                <p class="text-[10px] sm:text-xs tracking-[0.24em] text-nova-muted uppercase mb-6">
+                    TRANSFORMAMOS IDEAS EN EXPERIENCIAS DIGITALES ÚNICAS
+                </p>
+
+                <!-- Clear Value Proposition + Direct Action Buttons -->
+                <p class="max-w-2xl mx-auto text-xs sm:text-base text-nova-body leading-relaxed mb-6">
+                    Elige uno de nuestros <strong class="text-nova-white">3 paquetes de desarrollo web</strong>, personalízalo sumando funciones extra con cálculo de precio en vivo, o abre nuestro <button type="button" onclick="toggleBotChat(true)" class="text-nova-gold underline underline-offset-4 font-semibold hover:text-nova-white">Asesor Bot compacto</button> para que te recomiende el paquete ideal.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <a href="#planes" class="px-5 py-3 rounded-xl bg-nova-white text-nova-bg font-display font-bold text-xs sm:text-sm hover:bg-nova-body transition-nova flex items-center gap-2 shadow-glow-white">
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+                        <span>Ver los 3 Paquetes y Cotizar</span>
+                    </a>
+                    <button type="button" onclick="toggleBotChat(true)" class="px-5 py-3 rounded-xl bg-nova-surface hover:bg-nova-border text-nova-white border border-nova-border font-display font-semibold text-xs sm:text-sm transition-nova flex items-center gap-2">
+                        <i data-lucide="bot" class="w-4 h-4 text-nova-gold"></i>
+                        <span>¿No sabes cuál elegir? Abrir Asesor Bot</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             2. LOS 3 PAQUETES OFICIALES DE DESARROLLO WEB
+        =========================================== -->
+        <section id="planes" class="py-10 sm:py-14">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Section Header -->
+                <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+                    <span class="inline-block text-[10px] sm:text-xs font-display font-bold uppercase tracking-[0.22em] text-nova-gold mb-1.5">
+                        NOVACORE ESTUDIO • PLANES DE DESARROLLO WEB
+                    </span>
+                    <h2 class="font-display font-extrabold text-2xl sm:text-4xl text-nova-white tracking-tight">
+                        1. Elige tu Paquete Base
+                    </h2>
+                    <p class="text-xs sm:text-sm text-nova-muted mt-1.5">
+                        Toca cualquiera de los 3 paquetes para seleccionarlo y sumar funciones adicionales abajo.
+                    </p>
+                </div>
+
+                <!-- 3 Pricing Cards Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
+
+                    <!-- PAQUETE 1: PRESENCIA -->
+                    <div 
+                        id="plan-card-1" 
+                        onclick="selectPlan(1)"
+                        class="cursor-pointer rounded-3xl bg-nova-surface border-2 border-nova-border p-5 sm:p-7 flex flex-col justify-between transition-nova relative group hover:border-nova-muted"
+                    >
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="px-2.5 py-1 rounded-full bg-nova-bg border border-nova-border text-[10px] font-display font-bold uppercase tracking-wider text-nova-muted">
+                                    Nivel Inicial
+                                </span>
+                                <span id="plan-badge-selected-1" class="hidden px-2.5 py-1 rounded-full bg-nova-white text-nova-bg text-[10px] font-display font-bold uppercase tracking-wider">
+                                    Seleccionado ✓
+                                </span>
+                            </div>
+
+                            <h3 class="font-display font-extrabold text-lg sm:text-xl text-nova-white tracking-wide">
+                                1. PAQUETE PRESENCIA
+                            </h3>
+                            <p class="text-xs sm:text-sm text-nova-body italic mt-1 mb-5">
+                                "Existir en internet y no perder a los clientes."
+                            </p>
+
+                            <!-- Price Box -->
+                            <div class="rounded-2xl bg-nova-bg border border-nova-border p-4 mb-5">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-xs text-nova-muted">Inversión Única:</span>
+                                    <span class="font-display font-extrabold text-xl sm:text-2xl text-nova-white">$3,800 MXN</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-2 pt-2 border-t border-nova-border/70 text-xs">
+                                    <span class="text-nova-muted flex items-center gap-1.5">
+                                        <i data-lucide="calendar-check" class="w-3.5 h-3.5 text-nova-gold"></i>
+                                        Póliza mensual:
+                                    </span>
+                                    <span class="font-semibold text-nova-gold">$350 MXN/mes</span>
+                                </div>
+                            </div>
+
+                            <!-- Features from Flyer 1 -->
+                            <ul class="space-y-2.5 text-xs sm:text-sm text-nova-body mb-6">
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="layout-template" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span><strong class="text-nova-white">Página de aterrizaje</strong> (1 sección)</span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span><strong class="text-nova-white">Botón directo a WhatsApp</strong></span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="package-check" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span>Entrega: <strong class="text-nova-white">5 días hábiles</strong></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button id="plan-btn-1" type="button" class="w-full py-3 px-4 rounded-xl font-display font-bold text-xs sm:text-sm border border-nova-border bg-nova-bg text-nova-white group-hover:border-nova-white transition-nova">
+                            Seleccionar Paquete Presencia
+                        </button>
+                    </div>
+
+                    <!-- PAQUETE 2: CAPTACIÓN (RECOMENDADO) -->
+                    <div 
+                        id="plan-card-2" 
+                        onclick="selectPlan(2)"
+                        class="cursor-pointer rounded-3xl bg-nova-surface border-2 border-nova-white p-5 sm:p-7 flex flex-col justify-between transition-nova relative group plan-card-selected"
+                    >
+                        <!-- Top Floating Badge RECOMENDADO -->
+                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-nova-white text-nova-bg font-display font-extrabold text-[10px] sm:text-xs tracking-[0.16em] uppercase shadow-glow-white whitespace-nowrap">
+                            RECOMENDADO
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-3 mt-1">
+                                <span class="px-2.5 py-1 rounded-full bg-nova-gold/15 border border-nova-gold/40 text-[10px] font-display font-bold uppercase tracking-wider text-nova-gold">
+                                    Más Solicitado
+                                </span>
+                                <span id="plan-badge-selected-2" class="px-2.5 py-1 rounded-full bg-nova-white text-nova-bg text-[10px] font-display font-bold uppercase tracking-wider">
+                                    Seleccionado ✓
+                                </span>
+                            </div>
+
+                            <h3 class="font-display font-extrabold text-lg sm:text-xl text-nova-white tracking-wide">
+                                2. PAQUETE CAPTACIÓN
+                            </h3>
+                            <p class="text-xs sm:text-sm text-nova-body italic mt-1 mb-5">
+                                "Convertir curiosos en clientes directo a WhatsApp."
+                            </p>
+
+                            <!-- Price Box -->
+                            <div class="rounded-2xl bg-nova-bg border border-nova-white/30 p-4 mb-5">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-xs text-nova-muted">Inversión Única:</span>
+                                    <span class="font-display font-extrabold text-xl sm:text-2xl text-nova-white">$5,500 MXN</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-2 pt-2 border-t border-nova-border/70 text-xs">
+                                    <span class="text-nova-muted flex items-center gap-1.5">
+                                        <i data-lucide="calendar-check" class="w-3.5 h-3.5 text-nova-gold"></i>
+                                        Póliza mensual:
+                                    </span>
+                                    <span class="font-semibold text-nova-gold">$450 MXN/mes</span>
+                                </div>
+                            </div>
+
+                            <!-- Features from Flyer 2 -->
+                            <ul class="space-y-2.5 text-xs sm:text-sm text-nova-body mb-6">
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="panels-top-left" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span><strong class="text-nova-white">Página de ventas</strong> (4 secciones)</span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span><strong class="text-nova-white">Catálogo WhatsApp</strong> integrado</span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="package-check" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span>Entrega: <strong class="text-nova-white">10 días hábiles</strong></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button id="plan-btn-2" type="button" class="w-full py-3 px-4 rounded-xl font-display font-bold text-xs sm:text-sm bg-nova-white text-nova-bg transition-nova">
+                            Paquete Seleccionado ✓
+                        </button>
+                    </div>
+
+                    <!-- PAQUETE 3: ECOSISTEMA -->
+                    <div 
+                        id="plan-card-3" 
+                        onclick="selectPlan(3)"
+                        class="cursor-pointer rounded-3xl bg-nova-surface border-2 border-nova-border p-5 sm:p-7 flex flex-col justify-between transition-nova relative group hover:border-nova-muted"
+                    >
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="px-2.5 py-1 rounded-full bg-nova-bg border border-nova-border text-[10px] font-display font-bold uppercase tracking-wider text-nova-muted">
+                                    Autoridad Total
+                                </span>
+                                <span id="plan-badge-selected-3" class="hidden px-2.5 py-1 rounded-full bg-nova-white text-nova-bg text-[10px] font-display font-bold uppercase tracking-wider">
+                                    Seleccionado ✓
+                                </span>
+                            </div>
+
+                            <h3 class="font-display font-extrabold text-lg sm:text-xl text-nova-white tracking-wide">
+                                3. PAQUETE ECOSISTEMA
+                            </h3>
+                            <p class="text-xs sm:text-sm text-nova-body italic mt-1 mb-5">
+                                "Vender con autoridad y cobrar en línea."
+                            </p>
+
+                            <!-- Price Box -->
+                            <div class="rounded-2xl bg-nova-bg border border-nova-border p-4 mb-5">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-xs text-nova-muted">Inversión Única:</span>
+                                    <span class="font-display font-extrabold text-xl sm:text-2xl text-nova-white">$7,500 MXN</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-2 pt-2 border-t border-nova-border/70 text-xs">
+                                    <span class="text-nova-muted flex items-center gap-1.5">
+                                        <i data-lucide="calendar-check" class="w-3.5 h-3.5 text-nova-gold"></i>
+                                        Póliza mensual:
+                                    </span>
+                                    <span class="font-semibold text-nova-gold">$600 MXN/mes</span>
+                                </div>
+                            </div>
+
+                            <!-- Features from Flyer 3 -->
+                            <ul class="space-y-2.5 text-xs sm:text-sm text-nova-body mb-6">
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span><strong class="text-nova-white">Sitio Web completo</strong> (5 pestañas)</span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="credit-card" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span><strong class="text-nova-white">Link de pagos</strong> (cobro en línea)</span>
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <div class="w-7 h-7 rounded-lg bg-nova-bg border border-nova-border flex items-center justify-center text-nova-gold shrink-0">
+                                        <i data-lucide="package-check" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                    <span>Entrega: <strong class="text-nova-white">15 días hábiles</strong></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button id="plan-btn-3" type="button" class="w-full py-3 px-4 rounded-xl font-display font-bold text-xs sm:text-sm border border-nova-border bg-nova-bg text-nova-white group-hover:border-nova-white transition-nova">
+                            Seleccionar Paquete Ecosistema
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Banner Formas de Pago Flexibles (From Flyers) -->
+                <div class="mt-6 rounded-2xl bg-nova-surface/90 border border-nova-gold/30 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+                    <div class="flex flex-col sm:flex-row items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-nova-bg border border-nova-gold/40 flex items-center justify-center text-nova-gold shrink-0">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-display font-extrabold text-sm sm:text-base text-nova-white tracking-wide uppercase">
+                                ¡FORMAS DE PAGO <span class="text-nova-gold">FLEXIBLES</span> Y <span class="text-nova-gold">ACCESIBLES</span>!
+                            </h4>
+                            <p class="text-xs text-nova-body">
+                                Paga en cómodos plazos. Tu póliza mensual cubre Hosting de alta velocidad, Certificado SSL y soporte técnico continuo.
+                            </p>
+                        </div>
+                    </div>
+                    <a href="#extras" class="px-4 py-2.5 rounded-xl bg-nova-bg hover:bg-nova-border text-nova-white border border-nova-border font-display font-semibold text-xs whitespace-nowrap transition-nova">
+                        Personalizar Extras ↓
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             3. CONFIGURADOR DE EXTRAS + RESUMEN DE PEDIDO A WHATSAPP
+        =========================================== -->
+        <section id="extras" class="py-8 sm:py-14 border-t border-nova-border/70">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+
+                    <!-- Left Column (7 cols): Add-ons Selection -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div>
+                            <span class="text-[10px] sm:text-xs font-display font-bold uppercase tracking-[0.2em] text-nova-gold">
+                                PASO 2 • PERSONALIZA TU PÁGINA
+                            </span>
+                            <h2 class="font-display font-extrabold text-xl sm:text-3xl text-nova-white mt-1">
+                                ¿Le quieres agregar algo más a tu página?
+                            </h2>
+                            <p class="text-xs sm:text-sm text-nova-muted mt-1">
+                                Marca las funciones adicionales que necesites. Su costo se suma automáticamente al subtotal de tu paquete.
+                            </p>
+                        </div>
+
+                        <!-- Counter for Extra Sections / Tabs -->
+                        <div class="rounded-2xl bg-nova-surface border border-nova-border p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-nova-bg border border-nova-border flex items-center justify-center text-nova-white shrink-0 mt-0.5">
+                                    <i data-lucide="file-plus-2" class="w-4 h-4 text-nova-gold"></i>
+                                </div>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <h4 class="font-display font-bold text-sm text-nova-white">Sección o Pestaña Adicional</h4>
+                                        <span class="px-2 py-0.5 rounded-md bg-nova-bg border border-nova-border text-[11px] font-display font-bold text-nova-gold">
+                                            +$600 MXN c/u
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-nova-muted mt-0.5">
+                                        Agrega más pestañas o secciones (ej. Galería, Preguntas Frecuentes, Sucursales, Portafolio).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2.5 self-end sm:self-center bg-nova-bg border border-nova-border rounded-xl p-1">
+                                <button type="button" onclick="updateExtraSections(-1)" class="w-8 h-8 rounded-lg bg-nova-surface hover:bg-nova-border text-nova-white flex items-center justify-center font-bold transition-colors">
+                                    -
+                                </button>
+                                <span id="extra-sections-count" class="w-7 text-center font-display font-bold text-sm text-nova-white">0</span>
+                                <button type="button" onclick="updateExtraSections(1)" class="w-8 h-8 rounded-lg bg-nova-white text-nova-bg hover:bg-nova-body flex items-center justify-center font-bold transition-colors">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Checkboxes Container -->
+                        <div id="addons-container" class="space-y-3">
+                            <!-- Rendered by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column (5 cols): Live Sticky Quote & WhatsApp Checkout -->
+                    <div id="resumen-cotizacion" class="lg:col-span-5 lg:sticky lg:top-24">
+                        <div class="rounded-3xl bg-nova-surface border-2 border-nova-white p-5 sm:p-6 shadow-glow-white">
+                            <div class="flex items-center justify-between border-b border-nova-border pb-3.5 mb-4">
+                                <div>
+                                    <span class="text-[10px] font-display font-bold uppercase tracking-[0.2em] text-nova-gold block">
+                                        RESUMEN EN TIEMPO REAL
+                                    </span>
+                                    <h3 class="font-display font-extrabold text-lg sm:text-xl text-nova-white">
+                                        Tu Cotización Novacore
+                                    </h3>
+                                </div>
+                                <button type="button" onclick="resetConfigurator()" class="text-xs text-nova-muted hover:text-nova-white underline">
+                                    Reiniciar
+                                </button>
+                            </div>
+
+                            <!-- Selected Base Plan Box -->
+                            <div class="rounded-2xl bg-nova-bg border border-nova-border p-3.5 mb-4">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div>
+                                        <span class="text-[10px] uppercase tracking-wider text-nova-muted block">Paquete Base Elegido</span>
+                                        <h4 id="summary-plan-name" class="font-display font-bold text-sm text-nova-white mt-0.5">
+                                            2. PAQUETE CAPTACIÓN
+                                        </h4>
+                                        <span id="summary-plan-delivery" class="text-[11px] text-nova-gold block mt-0.5">
+                                            Entrega: 10 días hábiles
+                                        </span>
+                                    </div>
+                                    <span id="summary-plan-price" class="font-display font-bold text-sm text-nova-white whitespace-nowrap">
+                                        $5,500 MXN
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Added Extras List -->
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between text-xs text-nova-muted mb-2">
+                                    <span class="uppercase tracking-wider font-semibold text-[11px]">Extras Agregados:</span>
+                                    <span id="summary-extras-Total-badge" class="text-nova-body font-medium">$0 MXN</span>
+                                </div>
+                                <ul id="summary-extras-list" class="space-y-1.5 text-xs border-l-2 border-nova-border pl-3 py-1">
+                                    <li class="text-nova-muted italic">Sin extras adicionales (solo lo incluido en tu paquete).</li>
+                                </ul>
+                            </div>
+
+                            <!-- Flexible Payment Selector -->
+                            <div class="mb-4 pt-3 border-t border-nova-border">
+                                <label class="block text-[10px] uppercase tracking-wider text-nova-muted font-semibold mb-2">
+                                    Elige cómo te gustaría pagarlo:
+                                </label>
+                                <div class="grid grid-cols-3 gap-1.5 text-xs">
+                                    <button type="button" id="scheme-btn-50-50" onclick="setPaymentScheme('50-50')" class="p-2 rounded-xl border text-center transition-nova bg-nova-white text-nova-bg border-nova-white font-bold">
+                                        50% / 50%
+                                    </button>
+                                    <button type="button" id="scheme-btn-3-plazos" onclick="setPaymentScheme('3-plazos')" class="p-2 rounded-xl border text-center transition-nova bg-nova-bg text-nova-body border-nova-border hover:border-nova-muted font-semibold">
+                                        3 Plazos
+                                    </button>
+                                    <button type="button" id="scheme-btn-contado" onclick="setPaymentScheme('contado')" class="p-2 rounded-xl border text-center transition-nova bg-nova-bg text-nova-body border-nova-border hover:border-nova-muted font-semibold">
+                                        1 Exhibición
+                                    </button>
+                                </div>
+                                <p id="scheme-breakdown-text" class="text-[11px] text-nova-gold mt-2 bg-nova-bg/80 border border-nova-border rounded-xl px-3 py-2">
+                                    Inicias con <strong>$2,750 MXN</strong> (50%) y liquidas <strong>$2,750 MXN</strong> al entregar tu página.
+                                </p>
+                            </div>
+
+                            <!-- Grand Total Breakdown -->
+                            <div class="rounded-2xl bg-nova-bg border border-nova-white/30 p-4 mb-4">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-xs text-nova-body font-medium">Total Inversión Única:</span>
+                                    <span id="summary-total-price" class="font-display font-extrabold text-2xl sm:text-3xl text-nova-white">
+                                        $5,500 MXN
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-nova-muted mt-1.5 pt-1.5 border-t border-nova-border">
+                                    <span>Póliza mensual (Hosting + SSL + Soporte):</span>
+                                    <span id="summary-poliza-price" class="text-nova-gold font-semibold">$450 MXN/mes</span>
+                                </div>
+                            </div>
+
+                            <!-- Optional Client Details for WhatsApp Message -->
+                            <div class="space-y-2 mb-4">
+                                <input 
+                                    id="client-name" 
+                                    type="text" 
+                                    oninput="updateLiveSummary()"
+                                    placeholder="Tu nombre (opcional)" 
+                                    class="w-full bg-nova-bg border border-nova-border focus:border-nova-white rounded-xl px-3.5 py-2.5 text-xs text-nova-white placeholder-nova-muted outline-none"
+                                >
+                                <input 
+                                    id="client-business" 
+                                    type="text" 
+                                    oninput="updateLiveSummary()"
+                                    placeholder="Nombre o giro de tu negocio (opcional)" 
+                                    class="w-full bg-nova-bg border border-nova-border focus:border-nova-white rounded-xl px-3.5 py-2.5 text-xs text-nova-white placeholder-nova-muted outline-none"
+                                >
+                            </div>
+
+                            <!-- WhatsApp Message Preview Collapsible -->
+                            <details class="mb-4 group bg-nova-bg rounded-xl border border-nova-border overflow-hidden">
+                                <summary class="px-3.5 py-2 text-[11px] text-nova-muted cursor-pointer hover:text-nova-white flex items-center justify-between select-none">
+                                    <span class="flex items-center gap-1.5">
+                                        <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                        Ver mensaje que se enviará a WhatsApp
+                                    </span>
+                                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <pre id="whatsapp-preview-box" class="px-3.5 pb-3 pt-1 text-[11px] text-nova-body whitespace-pre-wrap font-sans border-t border-nova-border/60 leading-relaxed"></pre>
+                            </details>
+
+                            <!-- Primary CTA: Send Order to WhatsApp -->
+                            <button 
+                                type="button" 
+                                onclick="sendOrderViaWhatsApp()"
+                                class="w-full py-3.5 px-5 rounded-2xl bg-nova-white hover:bg-nova-body text-nova-bg font-display font-extrabold text-sm sm:text-base transition-nova flex items-center justify-center gap-2.5 shadow-glow-white"
+                            >
+                                <i data-lucide="message-circle" class="w-5 h-5 fill-current"></i>
+                                <span>Pedir por WhatsApp Ahora</span>
+                            </button>
+
+                            <button 
+                                type="button" 
+                                onclick="copyQuoteToClipboard()"
+                                class="mt-2 w-full py-2 px-4 rounded-xl bg-nova-bg hover:bg-nova-border text-nova-muted hover:text-nova-white border border-nova-border font-display font-medium text-xs transition-nova flex items-center justify-center gap-1.5"
+                            >
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span id="copy-btn-text">Copiar resumen de mi cotización</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==========================================
+         FOOTER CORPORATIVO LIMPIO
+    =========================================== -->
+    <footer class="border-t border-nova-border bg-nova-bg py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-nova-surface border border-nova-border flex items-center justify-center p-1 overflow-hidden shrink-0">
+                        <div class="novacore-vector-slot w-8 h-8"></div>
+                    </div>
+                    <div>
+                        <span class="font-serifBrand font-bold text-sm text-nova-white tracking-[0.14em] block">NOVACORE ESTUDIO</span>
+                        <span class="text-xs text-nova-muted">Diseño Web • Apps Móviles • Catálogos • Soluciones Digitales</span>
+                    </div>
+                </div>
+
+                <p class="text-xs text-nova-muted">
+                    © 2026 Novacore Estudio. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         STICKY MOBILE BOTTOM CHECKOUT BAR (ONLY ON PHONES/TABLETS)
+    =========================================== -->
+    <div class="fixed bottom-0 inset-x-0 z-30 lg:hidden bg-nova-bg/95 backdrop-blur-xl border-t border-nova-border px-3.5 py-2.5 flex items-center justify-between gap-3">
+        <div>
+            <span id="mobile-bar-plan" class="block text-[10px] uppercase tracking-wider text-nova-gold font-semibold leading-none">
+                2. Paquete Captación
+            </span>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+                <span id="mobile-bar-total" class="font-display font-bold text-lg text-nova-white">$5,500 MXN</span>
+                <span class="text-[10px] text-nova-muted">total</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="#resumen-cotizacion" class="px-3 py-2.5 rounded-xl bg-nova-surface border border-nova-border text-xs font-semibold text-nova-body">
+                Ver Detalle
+            </a>
+            <button type="button" onclick="sendOrderViaWhatsApp()" class="px-4 py-2.5 rounded-xl bg-nova-white text-nova-bg font-display font-extrabold text-xs flex items-center gap-1.5 shadow-glow-white">
+                <i data-lucide="message-circle" class="w-4 h-4 fill-current"></i>
+                <span>Pedir WhatsApp</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         COMPACT FLOATING BOT LAUNCHER & SMALL POPUP CHAT WINDOW
+         (Replaces the huge in-page section to save mobile screen space!)
+    =========================================== -->
+    <!-- Floating Trigger Button -->
+    <button 
+        id="bot-fab-button"
+        type="button" 
+        onclick="toggleBotChat()" 
+        class="fixed bottom-20 lg:bottom-6 right-4 sm:right-6 z-40 bg-nova-surface hover:bg-nova-border text-nova-white border-2 border-nova-gold/70 rounded-full px-4 py-2.5 sm:py-3 shadow-chat-float flex items-center gap-2.5 transition-nova group"
+    >
+        <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-nova-gold opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-nova-gold"></span>
+        </span>
+        <i data-lucide="bot" class="w-4 h-4 sm:w-5 sm:h-5 text-nova-gold"></i>
+        <div class="text-left leading-tight">
+            <span class="block text-[11px] sm:text-xs font-display font-bold text-nova-white">¿Dudas? Asesor Bot</span>
+            <span class="hidden sm:block text-[9px] text-nova-muted">Te recomiendo tu plan</span>
+        </div>
+    </button>
+
+    <!-- Compact Floating Chat Popup Window -->
+    <div 
+        id="bot-floating-window" 
+        class="fixed bottom-20 lg:bottom-6 right-3 sm:right-6 z-50 w-[355px] sm:w-[380px] max-w-[calc(100vw-24px)] h-[490px] max-h-[76vh] bg-nova-surface border-2 border-nova-border rounded-3xl shadow-chat-float flex flex-col overflow-hidden transition-all duration-200 origin-bottom-right scale-95 opacity-0 pointer-events-none"
+    >
+        <!-- Compact Chat Header -->
+        <div class="bg-nova-bg px-4 py-3 border-b border-nova-border flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-nova-surface border border-nova-gold/50 flex items-center justify-center text-nova-gold relative">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-nova-bg"></span>
+                </div>
+                <div>
+                    <h3 class="font-display font-bold text-xs sm:text-sm text-nova-white leading-none">Asesor Digital Novacore</h3>
+                    <span class="text-[10px] text-nova-gold block mt-0.5">En línea • Te recomienda tu plan ideal</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1">
+                <button type="button" onclick="resetBotChat()" title="Reiniciar conversación" class="p-1.5 rounded-lg text-nova-muted hover:text-nova-white hover:bg-nova-surface transition-colors">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="toggleBotChat(false)" title="Cerrar chat" class="p-1.5 rounded-lg text-nova-muted hover:text-nova-white hover:bg-nova-surface transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Scrollable Chat Messages Area -->
+        <div id="bot-chat-messages" class="flex-1 overflow-y-auto p-3.5 space-y-3 bg-nova-bg/60 text-xs">
+            <!-- Initial Greeting & Quick Chips injected by JS -->
+        </div>
+
+        <!-- Compact Chat Input Footer -->
+        <form onsubmit="handleFloatingBotSubmit(event)" class="p-2.5 bg-nova-bg border-t border-nova-border flex items-center gap-2 shrink-0">
+            <input 
+                id="floating-bot-input" 
+                type="text" 
+                placeholder="Platícame de qué es tu negocio..." 
+                class="flex-1 bg-nova-surface border border-nova-border focus:border-nova-white rounded-xl px-3 py-2 text-xs text-nova-white placeholder-nova-muted outline-none"
+            >
+            <button type="submit" class="px-3 py-2 rounded-xl bg-nova-white text-nova-bg font-display font-bold text-xs hover:bg-nova-body transition-nova flex items-center gap-1 shrink-0">
+                <span>Enviar</span>
+                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- ==========================================
+         TOAST NOTIFICATION
+    =========================================== -->
+    <div id="nova-toast" class="fixed top-20 right-4 z-50 max-w-xs bg-nova-white text-nova-bg px-4 py-3 rounded-2xl shadow-glow-white font-display font-bold text-xs flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-10px]">
+        <i data-lucide="check-circle" class="w-4 h-4 shrink-0"></i>
+        <span id="nova-toast-text">Cotización actualizada</span>
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT LOGIC: CRISP LOGO, PLANS, ADD-ONS & COMPACT FLOATING BOT
+    =========================================== -->
+    <script>
+        // =========================================================================
+        // CONFIGURACIÓN DEL NÚMERO DE WHATSAPP DE NOVACORE ESTUDIO
+        // =========================================================================
+        const WHATSAPP_NUMBER = '5219621234567'; // <-- CAMBIA AQUÍ TU NÚMERO DE WHATSAPP DE NOVACORE (con 521 + 10 dígitos)
+
+        // =========================================================================
+        // 0. CRISP WHITE & SILVER NOVACORE MONOGRAM SVG GENERATOR
+        //    Explicit fill="none" & hex strokes (#FFFFFF / #D9D9D9) so it NEVER renders black!
+        // =========================================================================
+        function getNovacoreMonogramSVG() {
+            return `
+            <svg viewBox="0 0 240 240" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" class="novacore-svg-logo block">
+                <!-- 1. Concentric Astrolabe Rings behind the N and 8-pointed Nova Star -->
+                <circle cx="120" cy="120" r="70" fill="none" stroke="#D9D9D9" stroke-width="1.5" stroke-opacity="0.75" />
+                <circle cx="120" cy="120" r="63" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.55" />
+                <circle cx="120" cy="120" r="56" fill="none" stroke="#D9D9D9" stroke-width="1.3" stroke-opacity="0.8" />
+
+                <!-- 2. Architectural Multi-Line Letter "N" -->
+                <!-- Left Pillar of the "N": Triple engraved silver/white lines + ladder ticks -->
+                <path d="M 46 42 L 74 42 L 74 162 C 74 184 58 196 46 198 Z" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" />
+                <path d="M 51 47 L 69 47 L 69 161 C 69 178 57 188 51 191 Z" fill="none" stroke="#D9D9D9" stroke-width="1.4" />
+                <path d="M 56 52 L 64 52 L 64 159 C 64 171 58 178 56 181 Z" fill="none" stroke="#FFFFFF" stroke-width="1.1" />
+                <path d="M 56 62 H 64 M 56 70 H 64 M 56 78 H 64 M 56 86 H 64 M 56 94 H 64 M 56 102 H 64 M 56 138 H 64 M 56 146 H 64 M 56 154 H 64 M 56 162 H 64 M 56 170 H 63" fill="none" stroke="#D9D9D9" stroke-width="1" stroke-opacity="0.8" />
+
+                <!-- Right Pillar of the "N": Triple engraved silver/white lines + ladder ticks -->
+                <path d="M 194 42 C 182 44 166 56 166 78 L 166 198 L 194 198 Z" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" />
+                <path d="M 189 49 C 181 52 171 62 171 79 L 171 193 L 189 193 Z" fill="none" stroke="#D9D9D9" stroke-width="1.4" />
+                <path d="M 184 59 C 179 62 176 69 176 81 L 176 188 L 184 188 Z" fill="none" stroke="#FFFFFF" stroke-width="1.1" />
+                <path d="M 176 70 H 184 M 176 78 H 184 M 176 86 H 184 M 176 94 H 184 M 176 102 H 184 M 176 138 H 184 M 176 146 H 184 M 176 154 H 184 M 176 162 H 184 M 176 170 H 184 M 176 178 H 184" fill="none" stroke="#D9D9D9" stroke-width="1" stroke-opacity="0.8" />
+
+                <!-- Sweeping S-Curved Diagonal Ribbon of the "N" -->
+                <path d="M 52 42 C 88 38 106 68 124 105 C 142 142 156 198 190 198 L 172 198 C 140 198 126 152 108 114 C 90 76 76 54 52 54 Z" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="2" />
+                <path d="M 58 46 C 86 44 102 72 120 108 C 138 144 152 193 182 193" fill="none" stroke="#D9D9D9" stroke-width="1.3" />
+                <path d="M 55 50 C 81 50 96 76 114 112 C 132 148 146 195 176 195" fill="none" stroke="#FFFFFF" stroke-width="1.1" />
+                <!-- Crosshatch lattice lines inside the S-curve -->
+                <path d="M 78 52 L 88 62 M 84 54 L 94 64 M 90 58 L 100 68 M 86 50 L 76 60 M 92 54 L 82 64 M 142 172 L 154 184 M 148 176 L 160 188 M 156 174 L 144 186 M 162 178 L 150 190" fill="none" stroke="#D9D9D9" stroke-width="1" stroke-opacity="0.85" />
+
+                <!-- 3. The 8-Pointed Nova / Compass Rose Star (Crisp White & Silver) -->
+                <!-- 4 Diagonal Rays (NE, SE, SW, NW) -->
+                <polygon points="120,96 174,66 144,120 174,174 120,144 66,174 96,120 66,66" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="2.1" stroke-linejoin="miter" />
+                <polygon points="120,101 165,75 139,120 165,165 120,139 75,165 101,120 75,75" fill="none" stroke="#D9D9D9" stroke-width="1.3" stroke-linejoin="miter" />
+                <polygon points="120,106 155,85 134,120 155,155 120,134 85,155 106,120 85,85" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="miter" />
+
+                <!-- 4 Long Cardinal Rays (North, East, South, West) -->
+                <polygon points="120,14 138,102 226,120 138,138 120,226 102,138 14,120 102,102" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="2.3" stroke-linejoin="miter" />
+                <polygon points="120,29 133,107 211,120 133,133 120,211 107,133 29,120 107,107" fill="none" stroke="#D9D9D9" stroke-width="1.4" stroke-linejoin="miter" />
+                <polygon points="120,44 128,112 196,120 128,128 120,196 112,128 44,120 112,112" fill="none" stroke="#FFFFFF" stroke-width="1.1" stroke-linejoin="miter" />
+
+                <!-- Center Bevel Ridge Lines of the 4 Cardinal Spikes -->
+                <line x1="120" y1="44" x2="120" y2="96" fill="none" stroke="#FFFFFF" stroke-width="1.2" />
+                <line x1="120" y1="144" x2="120" y2="196" fill="none" stroke="#FFFFFF" stroke-width="1.2" />
+                <line x1="44" y1="120" x2="96" y2="120" fill="none" stroke="#FFFFFF" stroke-width="1.2" />
+                <line x1="144" y1="120" x2="196" y2="120" fill="none" stroke="#FFFFFF" stroke-width="1.2" />
+
+                <!-- 4. Central Core Bullseye Rings -->
+                <circle cx="120" cy="120" r="24" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="2.2" />
+                <circle cx="120" cy="120" r="19" fill="none" stroke="#D9D9D9" stroke-width="1.3" />
+                <circle cx="120" cy="120" r="13" fill="#0B0B0B" stroke="#FFFFFF" stroke-width="2" />
+                <circle cx="120" cy="120" r="9" fill="none" stroke="#D9D9D9" stroke-width="1.2" />
+            </svg>`;
+        }
+
+        // 1. OFFICIAL NOVACORE PLANS DATA (Exact match with flyers)
+        const NOVACORE_PLANS = {
+            1: {
+                id: 1,
+                name: '1. PAQUETE PRESENCIA',
+                shortName: '1. Paquete Presencia',
+                tagline: 'Existir en internet y no perder a los clientes.',
+                price: 3800,
+                poliza: 350,
+                delivery: '5 días hábiles',
+                features: [
+                    'Página de aterrizaje (1 sección)',
+                    'Botón a WhatsApp',
+                    'Entrega: 5 días hábiles'
+                ],
+                includedAddons: []
+            },
+            2: {
+                id: 2,
+                name: '2. PAQUETE CAPTACIÓN',
+                shortName: '2. Paquete Captación',
+                tagline: 'Convertir curiosos en clientes directo a WhatsApp.',
+                price: 5500,
+                poliza: 450,
+                delivery: '10 días hábiles',
+                features: [
+                    'Página de ventas (4 secciones)',
+                    'Catálogo WhatsApp',
+                    'Entrega: 10 días hábiles'
+                ],
+                includedAddons: ['catalogo_wa']
+            },
+            3: {
+                id: 3,
+                name: '3. PAQUETE ECOSISTEMA',
+                shortName: '3. Paquete Ecosistema',
+                tagline: 'Vender con autoridad y cobrar en línea.',
+                price: 7500,
+                poliza: 600,
+                delivery: '15 días hábiles',
+                features: [
+                    'Sitio Web (5 pestañas)',
+                    'Link de pagos',
+                    'Entrega: 15 días hábiles'
+                ],
+                includedAddons: ['link_pagos']
+            }
+        };
+
+        // 2. CONFIGURABLE ADD-ONS (EXTRAS)
+        const NOVACORE_ADDONS = [
+            {
+                id: 'catalogo_wa',
+                name: 'Catálogo Interactivo con Carrito a WhatsApp',
+                price: 1200,
+                description: 'Tus clientes eligen productos/servicios y te envían su pedido ya sumado por WhatsApp.'
+            },
+            {
+                id: 'link_pagos',
+                name: 'Integración de Link / Pasarela de Pagos en Línea',
+                price: 1100,
+                description: 'Recibe pagos con tarjeta de crédito, débito o transferencia directo en tu web.'
+            },
+            {
+                id: 'citas',
+                name: 'Sistema de Agendamiento de Citas / Reservas',
+                price: 1200,
+                description: 'Ideal para consultorios, clínicas, salones o asesorías con confirmación en WhatsApp.'
+            },
+            {
+                id: 'seo_maps',
+                name: 'Google Maps Business + Optimización SEO Local',
+                price: 750,
+                description: 'Aparece en Google y Google Maps cuando busquen tu servicio en tu ciudad.'
+            },
+            {
+                id: 'chatbot_faq',
+                name: 'Asistente Bot de Atención 24/7 en tu Página',
+                price: 1300,
+                description: 'Responde dudas frecuentes, recomienda tus servicios y guía al cliente a tu WhatsApp.'
+            },
+            {
+                id: 'panel_admin',
+                name: 'Panel Autoadministrable + Base de Datos',
+                price: 1900,
+                description: 'Actualiza precios, fotos o productos tú mismo desde tu celular o computadora.'
+            },
+            {
+                id: 'bilingue',
+                name: 'Versión Bilingüe (Español / Inglés)',
+                price: 950,
+                description: 'Selector de idioma completo para atender clientes nacionales y extranjeros.'
+            },
+            {
+                id: 'express',
+                name: 'Entrega Express Prioritaria (-40% tiempo)',
+                price: 900,
+                description: 'Prioridad máxima en estudio para lanzar tu página en tiempo récord.'
+            }
+        ];
+
+        // 3. APPLICATION STATE
+        let state = {
+            selectedPlanId: 2,
+            extraSectionsCount: 0,
+            extraSectionUnitPrice: 600,
+            selectedAddons: new Set(),
+            paymentScheme: '50-50',
+            botOpen: false,
+            botRec: {
+                planId: 2,
+                addons: new Set(),
+                businessText: ''
+            }
+        };
+
+        function formatMXN(amount) {
+            return '$' + amount.toLocaleString('es-MX') + ' MXN';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('nova-toast');
+            const toastText = document.getElementById('nova-toast-text');
+            toastText.textContent = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 2800);
+        }
+
+        // Inject crisp inline SVG into all `.novacore-vector-slot` containers
+        function mountVectorLogos() {
+            const svgMarkup = getNovacoreMonogramSVG();
+            document.querySelectorAll('.novacore-vector-slot').forEach(slot => {
+                slot.innerHTML = svgMarkup;
+            });
+        }
+
+        // Select one of the 3 official plans
+        function selectPlan(planId, silent = false) {
+            state.selectedPlanId = planId;
+            const plan = NOVACORE_PLANS[planId];
+
+            // Remove any add-on already bundled in the newly chosen plan
+            plan.includedAddons.forEach(includedId => {
+                if (state.selectedAddons.has(includedId)) {
+                    state.selectedAddons.delete(includedId);
+                }
+            });
+
+            [1, 2, 3].forEach(id => {
+                const card = document.getElementById(`plan-card-${id}`);
+                const btn = document.getElementById(`plan-btn-${id}`);
+                const badge = document.getElementById(`plan-badge-selected-${id}`);
+
+                if (id === planId) {
+                    card.classList.add('plan-card-selected');
+                    card.classList.remove('border-nova-border');
+                    badge.classList.remove('hidden');
+                    btn.className = 'w-full py-3 px-4 rounded-xl font-display font-bold text-xs sm:text-sm bg-nova-white text-nova-bg transition-nova';
+                    btn.textContent = 'Paquete Seleccionado ✓';
+                } else {
+                    card.classList.remove('plan-card-selected');
+                    card.classList.add('border-nova-border');
+                    badge.classList.add('hidden');
+                    btn.className = 'w-full py-3 px-4 rounded-xl font-display font-bold text-xs sm:text-sm border border-nova-border bg-nova-bg text-nova-white group-hover:border-nova-white transition-nova';
+                    btn.textContent = `Seleccionar ${NOVACORE_PLANS[id].shortName}`;
+                }
+            });
+
+            renderAddonsList();
+            updateLiveSummary();
+
+            if (!silent) {
+                showToast(`Seleccionaste: ${plan.name}`);
+            }
+        }
+
+        // Render Add-ons checkboxes dynamically
+        function renderAddonsList() {
+            const container = document.getElementById('addons-container');
+            const currentPlan = NOVACORE_PLANS[state.selectedPlanId];
+
+            container.innerHTML = NOVACORE_ADDONS.map(addon => {
+                const isIncludedInPlan = currentPlan.includedAddons.includes(addon.id);
+                const isChecked = state.selectedAddons.has(addon.id);
+
+                if (isIncludedInPlan) {
+                    return `
+                        <div class="rounded-2xl bg-nova-surface/60 border border-nova-gold/40 p-4 flex items-center justify-between gap-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-lg bg-nova-gold/20 border border-nova-gold flex items-center justify-center text-nova-gold shrink-0 mt-0.5">
+                                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                </div>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <h4 class="font-display font-bold text-xs sm:text-sm text-nova-white">${addon.name}</h4>
+                                        <span class="px-2 py-0.5 rounded-full bg-nova-gold/20 text-nova-gold text-[10px] font-bold">
+                                            ¡Ya incluido en tu paquete!
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-nova-muted mt-0.5">${addon.description}</p>
+                                </div>
+                            </div>
+                            <span class="font-display font-bold text-xs text-nova-gold shrink-0">$0 MXN</span>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div onclick="toggleAddon('${addon.id}')" class="cursor-pointer rounded-2xl bg-nova-surface border ${isChecked ? 'border-nova-white shadow-glow-subtle' : 'border-nova-border hover:border-nova-muted'} p-4 flex items-center justify-between gap-3 transition-nova">
+                        <div class="flex items-start gap-3">
+                            <div class="w-5 h-5 rounded-md border ${isChecked ? 'bg-nova-white border-nova-white text-nova-bg' : 'bg-nova-bg border-nova-muted text-transparent'} flex items-center justify-center shrink-0 mt-0.5 transition-nova">
+                                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold text-xs sm:text-sm text-nova-white">${addon.name}</h4>
+                                <p class="text-xs text-nova-muted mt-0.5">${addon.description}</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="font-display font-bold text-xs sm:text-sm ${isChecked ? 'text-nova-white' : 'text-nova-body'}">+${formatMXN(addon.price)}</span>
+                            <span class="block text-[10px] ${isChecked ? 'text-nova-gold font-semibold' : 'text-nova-muted'}">${isChecked ? 'Agregado ✓' : 'Agregar'}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function toggleAddon(addonId) {
+            const currentPlan = NOVACORE_PLANS[state.selectedPlanId];
+            if (currentPlan.includedAddons.includes(addonId)) return;
+
+            if (state.selectedAddons.has(addonId)) {
+                state.selectedAddons.delete(addonId);
+            } else {
+                state.selectedAddons.add(addonId);
+            }
+            renderAddonsList();
+            updateLiveSummary();
+        }
+
+        function updateExtraSections(delta) {
+            const next = Math.max(0, Math.min(15, state.extraSectionsCount + delta));
+            state.extraSectionsCount = next;
+            document.getElementById('extra-sections-count').textContent = next;
+            updateLiveSummary();
+        }
+
+        function setPaymentScheme(scheme) {
+            state.paymentScheme = scheme;
+            ['50-50', '3-plazos', 'contado'].forEach(s => {
+                const btn = document.getElementById(`scheme-btn-${s}`);
+                if (s === scheme) {
+                    btn.className = 'p-2 rounded-xl border text-center transition-nova bg-nova-white text-nova-bg border-nova-white font-bold text-xs';
+                } else {
+                    btn.className = 'p-2 rounded-xl border text-center transition-nova bg-nova-bg text-nova-body border-nova-border hover:border-nova-muted font-semibold text-xs';
+                }
+            });
+            updateLiveSummary();
+        }
+
+        // Calculate Totals & Update Live Summary + Sticky Mobile Bar + WhatsApp Preview
+        function updateLiveSummary() {
+            const plan = NOVACORE_PLANS[state.selectedPlanId];
+            let extrasTotal = 0;
+            const extrasItemsHTML = [];
+            const extrasTextLines = [];
+
+            if (state.extraSectionsCount > 0) {
+                const sectionsCost = state.extraSectionsCount * state.extraSectionUnitPrice;
+                extrasTotal += sectionsCost;
+                extrasItemsHTML.push(`
+                    <li class="flex items-center justify-between text-nova-body">
+                        <span>• ${state.extraSectionsCount}x Sección/Pestaña adicional</span>
+                        <span class="font-semibold text-nova-white">+${formatMXN(sectionsCost)}</span>
+                    </li>
+                `);
+                extrasTextLines.push(`  • ${state.extraSectionsCount}x Sección/Pestaña adicional (+${formatMXN(sectionsCost)})`);
+            }
+
+            state.selectedAddons.forEach(addonId => {
+                const addon = NOVACORE_ADDONS.find(a => a.id === addonId);
+                if (addon) {
+                    extrasTotal += addon.price;
+                    extrasItemsHTML.push(`
+                        <li class="flex items-center justify-between text-nova-body">
+                            <span>• ${addon.name}</span>
+                            <span class="font-semibold text-nova-white">+${formatMXN(addon.price)}</span>
+                        </li>
+                    `);
+                    extrasTextLines.push(`  • ${addon.name} (+${formatMXN(addon.price)})`);
+                }
+            });
+
+            const grandTotal = plan.price + extrasTotal;
+
+            // Update Navbar, Summary & Sticky Mobile Bar
+            document.getElementById('nav-subtotal').textContent = formatMXN(grandTotal);
+            document.getElementById('summary-plan-name').textContent = plan.name;
+            document.getElementById('summary-plan-delivery').textContent = `Entrega: ${plan.delivery}`;
+            document.getElementById('summary-plan-price').textContent = formatMXN(plan.price);
+            document.getElementById('summary-total-price').textContent = formatMXN(grandTotal);
+            document.getElementById('summary-poliza-price').textContent = `$${plan.poliza} MXN/mes`;
+
+            document.getElementById('mobile-bar-plan').textContent = plan.shortName;
+            document.getElementById('mobile-bar-total').textContent = formatMXN(grandTotal);
+
+            const summaryExtrasList = document.getElementById('summary-extras-list');
+            if (extrasItemsHTML.length === 0) {
+                summaryExtrasList.innerHTML = `<li class="text-xs text-nova-muted italic">Sin extras adicionales (solo lo incluido en tu paquete).</li>`;
+            } else {
+                summaryExtrasList.innerHTML = extrasItemsHTML.join('');
+            }
+
+            // Payment scheme breakdown
+            const schemeTextEl = document.getElementById('scheme-breakdown-text');
+            let schemeLabelForWA = '';
+            if (state.paymentScheme === '50-50') {
+                const half = Math.round(grandTotal / 2);
+                schemeTextEl.innerHTML = `Inicias hoy con <strong class="text-nova-white">${formatMXN(half)}</strong> (50%) y liquidas <strong class="text-nova-white">${formatMXN(grandTotal - half)}</strong> al recibir tu página.`;
+                schemeLabelForWA = `50% anticipo (${formatMXN(half)}) y 50% al entregar (${formatMXN(grandTotal - half)})`;
+            } else if (state.paymentScheme === '3-plazos') {
+                const third = Math.ceil(grandTotal / 3);
+                schemeTextEl.innerHTML = `En <strong class="text-nova-gold">3 cómodos pagos</strong> de aprox. <strong class="text-nova-white">${formatMXN(third)}</strong> c/u.`;
+                schemeLabelForWA = `3 plazos flexibles de aprox. ${formatMXN(third)} c/u`;
+            } else {
+                schemeTextEl.innerHTML = `1 sola exhibición por el total de <strong class="text-nova-white">${formatMXN(grandTotal)}</strong>.`;
+                schemeLabelForWA = `1 sola exhibición (${formatMXN(grandTotal)})`;
+            }
+
+            const clientName = document.getElementById('client-name').value.trim();
+            const clientBusiness = document.getElementById('client-business').value.trim();
+
+            let waMessage = `¡Hola equipo de *NOVACORE ESTUDIO*! 👋\n`;
+            waMessage += `Estuve en su página y armé este pedido para mi negocio:\n\n`;
+            if (clientName) waMessage += `*Nombre:* ${clientName}\n`;
+            if (clientBusiness) waMessage += `*Negocio / Giro:* ${clientBusiness}\n`;
+            waMessage += `*Paquete Elegido:* ${plan.name} (${formatMXN(plan.price)})\n`;
+            waMessage += `*Incluye:* ${plan.features.join(', ')}\n\n`;
+
+            if (extrasTextLines.length > 0) {
+                waMessage += `*Extras Agregados:*\n${extrasTextLines.join('\n')}\n\n`;
+            } else {
+                waMessage += `*Extras Agregados:* Ninguno por ahora.\n\n`;
+            }
+
+            waMessage += `*TOTAL INVERSIÓN ÚNICA:* *${formatMXN(grandTotal)}*\n`;
+            waMessage += `*Póliza Mensual:* $${plan.poliza} MXN/mes\n`;
+            waMessage += `*Forma de Pago:* ${schemeLabelForWA}\n\n`;
+            waMessage += `¿Me apoyan para iniciar con mi proyecto?`;
+
+            document.getElementById('whatsapp-preview-box').textContent = waMessage;
+        }
+
+        function resetConfigurator() {
+            state.extraSectionsCount = 0;
+            document.getElementById('extra-sections-count').textContent = '0';
+            state.selectedAddons.clear();
+            document.getElementById('client-name').value = '';
+            document.getElementById('client-business').value = '';
+            setPaymentScheme('50-50');
+            selectPlan(2, true);
+            showToast('Cotizador reiniciado');
+        }
+
+        function sendOrderViaWhatsApp() {
+            const message = document.getElementById('whatsapp-preview-box').textContent;
+            const cleanPhone = WHATSAPP_NUMBER.replace(/\D/g, '');
+            const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        function copyQuoteToClipboard() {
+            const message = document.getElementById('whatsapp-preview-box').textContent;
+            const textarea = document.createElement('textarea');
+            textarea.value = message;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const btnText = document.getElementById('copy-btn-text');
+            btnText.textContent = '¡Cotización copiada! ✓';
+            showToast('Resumen copiado al portapapeles');
+            setTimeout(() => {
+                btnText.textContent = 'Copiar resumen de mi cotización';
+            }, 2500);
+        }
+
+        // =========================================================================
+        // COMPACT FLOATING BOT LOGIC (POPUP CHAT WIDGET)
+        // =========================================================================
+        function toggleBotChat(forceState) {
+            const win = document.getElementById('bot-floating-window');
+            const nextState = typeof forceState === 'boolean' ? forceState : !state.botOpen;
+            state.botOpen = nextState;
+
+            if (nextState) {
+                win.classList.remove('scale-95', 'opacity-0', 'pointer-events-none');
+                win.classList.add('scale-100', 'opacity-100', 'pointer-events-auto');
+                setTimeout(() => {
+                    document.getElementById('floating-bot-input').focus();
+                }, 150);
+            } else {
+                win.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
+                win.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto');
+            }
+        }
+
+        function initBotGreeting() {
+            const chatBox = document.getElementById('bot-chat-messages');
+            chatBox.innerHTML = `
+                <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-nova-surface border border-nova-gold/50 flex items-center justify-center shrink-0 text-nova-gold mt-0.5">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="bg-nova-surface border border-nova-border rounded-2xl rounded-tl-sm p-3 text-nova-body leading-relaxed">
+                        ¡Hola! 👋 Platícame brevemente <strong class="text-nova-white">de qué es tu negocio</strong> o toca una opción rápida para recomendarte cuál de nuestros 3 paquetes te conviene más:
+                    </div>
+                </div>
+
+                <!-- Quick Mobile Chips -->
+                <div class="flex flex-wrap gap-1.5 pl-8">
+                    <button type="button" onclick="quickBotSelect('Tengo una tienda y quiero mostrar mi catálogo y recibir pedidos por WhatsApp')" class="px-2.5 py-1.5 rounded-xl bg-nova-surface hover:bg-nova-border border border-nova-border text-[11px] text-nova-white transition-colors">
+                        🛍️ Tienda / Catálogo
+                    </button>
+                    <button type="button" onclick="quickBotSelect('Tengo un consultorio o clínica y quiero que agenden citas en mi página')" class="px-2.5 py-1.5 rounded-xl bg-nova-surface hover:bg-nova-border border border-nova-border text-[11px] text-nova-white transition-colors">
+                        🩺 Clínica / Citas
+                    </button>
+                    <button type="button" onclick="quickBotSelect('Tengo un restaurante y quiero menú digital con pedidos a WhatsApp y mapa')" class="px-2.5 py-1.5 rounded-xl bg-nova-surface hover:bg-nova-border border border-nova-border text-[11px] text-nova-white transition-colors">
+                        🍔 Restaurante / Menú
+                    </button>
+                    <button type="button" onclick="quickBotSelect('Somos una empresa formal y queremos varias pestañas y cobrar en línea con tarjeta')" class="px-2.5 py-1.5 rounded-xl bg-nova-surface hover:bg-nova-border border border-nova-border text-[11px] text-nova-white transition-colors">
+                        🏢 Empresa / Cobro Online
+                    </button>
+                    <button type="button" onclick="quickBotSelect('Voy iniciando mi negocio y busco algo económico para existir en internet')" class="px-2.5 py-1.5 rounded-xl bg-nova-surface hover:bg-nova-border border border-nova-border text-[11px] text-nova-white transition-colors">
+                        🚀 Negocio que inicia
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function resetBotChat() {
+            initBotGreeting();
+        }
+
+        function quickBotSelect(text) {
+            processBotUserMessage(text);
+        }
+
+        function handleFloatingBotSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('floating-bot-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            processBotUserMessage(text);
+        }
+
+        function processBotUserMessage(userText) {
+            const chatBox = document.getElementById('bot-chat-messages');
+
+            // 1. Append User Bubble
+            const userDiv = document.createElement('div');
+            userDiv.className = 'flex justify-end';
+            userDiv.innerHTML = `
+                <div class="bg-nova-white text-nova-bg font-medium rounded-2xl rounded-tr-sm px-3 py-2 max-w-[82%] leading-snug">
+                    ${userText}
+                </div>
+            `;
+            chatBox.appendChild(userDiv);
+
+            // 2. Analyze keywords & determine best Plan + suggested Extras
+            const lower = userText.toLowerCase();
+            let recPlanId = 2;
+            const suggestedAddons = [];
+            let explanation = '';
+
+            if (
+                lower.includes('tarjeta') ||
+                lower.includes('cobrar') ||
+                lower.includes('link de pago') ||
+                lower.includes('pasarela') ||
+                lower.includes('empresa') ||
+                lower.includes('despacho') ||
+                lower.includes('constructora') ||
+                lower.includes('inmobiliaria') ||
+                lower.includes('pestañas')
+            ) {
+                recPlanId = 3;
+                explanation = 'Te conviene el <strong class="text-nova-white">3. Paquete Ecosistema</strong>: incluye 5 pestañas completas y link de pagos para cobrar en línea.';
+            } else if (
+                lower.includes('iniciando') ||
+                lower.includes('inicia') ||
+                lower.includes('empezando') ||
+                lower.includes('economico') ||
+                lower.includes('económico') ||
+                lower.includes('barato') ||
+                lower.includes('sencillo')
+            ) {
+                recPlanId = 1;
+                explanation = 'Para arrancar rápido, te recomiendo el <strong class="text-nova-white">1. Paquete Presencia</strong>: aterrizaje en 5 días hábiles con botón a WhatsApp.';
+            } else {
+                recPlanId = 2;
+                explanation = 'Para tu negocio, el <strong class="text-nova-white">2. Paquete Captación (Recomendado)</strong> es ideal: incluye 4 secciones de venta y Catálogo WhatsApp.';
+            }
+
+            if (lower.includes('cita') || lower.includes('consultorio') || lower.includes('clinica') || lower.includes('clínica') || lower.includes('dental') || lower.includes('medico') || lower.includes('salón') || lower.includes('salon') || lower.includes('barber') || lower.includes('spa')) {
+                suggestedAddons.push('citas');
+            }
+            if (lower.includes('mapa') || lower.includes('restaurante') || lower.includes('comida') || lower.includes('menu') || lower.includes('menú') || lower.includes('local') || lower.includes('ubicacion')) {
+                suggestedAddons.push('seo_maps');
+            }
+            if (lower.includes('bot') || lower.includes('automatico') || lower.includes('automático')) {
+                suggestedAddons.push('chatbot_faq');
+            }
+            if (suggestedAddons.length === 0) {
+                // Offer 2 smart optional add-ons they can toggle right inside the chat
+                if (recPlanId === 1) {
+                    suggestedAddons.push('catalogo_wa', 'seo_maps');
+                } else {
+                    suggestedAddons.push('seo_maps', 'citas');
+                }
+            }
+
+            // Filter out add-ons already included in the plan
+            const validSuggested = suggestedAddons.filter(id => !NOVACORE_PLANS[recPlanId].includedAddons.includes(id));
+
+            // Save in bot state (pre-check only the first if it directly matched their request)
+            state.botRec = {
+                planId: recPlanId,
+                addons: new Set(
+                    (lower.includes('cita') || lower.includes('clinica') || lower.includes('consultorio')) ? ['citas'] :
+                    (lower.includes('mapa') || lower.includes('restaurante')) ? ['seo_maps'] : []
+                ),
+                availableAddons: validSuggested,
+                businessText: userText
+            };
+
+            const clientBizInput = document.getElementById('client-business');
+            if (!clientBizInput.value) clientBizInput.value = userText.slice(0, 70);
+
+            // 3. Append Interactive Bot Recommendation Bubble
+            const recBubbleId = 'bot-rec-card-' + Date.now();
+            const botDiv = document.createElement('div');
+            botDiv.className = 'flex items-start gap-2';
+            botDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-lg bg-nova-surface border border-nova-gold/50 flex items-center justify-center shrink-0 text-nova-gold mt-0.5">
+                    <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+                </div>
+                <div id="${recBubbleId}" class="flex-1 bg-nova-surface border border-nova-white/40 rounded-2xl rounded-tl-sm p-3 text-nova-body space-y-2.5">
+                    <!-- Populated by renderBotCardContent -->
+                </div>
+            `;
+            chatBox.appendChild(botDiv);
+            renderBotCardContent(recBubbleId, explanation);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function renderBotCardContent(containerId, explanationHtml) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const plan = NOVACORE_PLANS[state.botRec.planId];
+            let extrasSum = 0;
+
+            const checkboxesHtml = state.botRec.availableAddons.map(addonId => {
+                const addon = NOVACORE_ADDONS.find(a => a.id === addonId);
+                if (!addon) return '';
+                const checked = state.botRec.addons.has(addonId);
+                if (checked) extrasSum += addon.price;
+
+                return `
+                    <label class="flex items-center justify-between gap-2 p-2 rounded-xl bg-nova-bg border ${checked ? 'border-nova-white' : 'border-nova-border'} cursor-pointer">
+                        <span class="flex items-center gap-2 text-[11px] text-nova-white">
+                            <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleBotCardAddon('${containerId}', '${addonId}')" class="accent-white">
+                            <span>${addon.name}</span>
+                        </span>
+                        <span class="text-[10px] font-bold text-nova-gold shrink-0">+${formatMXN(addon.price)}</span>
+                    </label>
+                `;
+            }).join('');
+
+            const total = plan.price + extrasSum;
+
+            container.innerHTML = `
+                <p class="leading-relaxed">${explanationHtml}</p>
+                <div class="p-2.5 rounded-xl bg-nova-bg border border-nova-border">
+                    <div class="flex items-center justify-between">
+                        <span class="font-display font-bold text-xs text-nova-white">${plan.name}</span>
+                        <span class="font-display font-bold text-xs text-nova-gold">${formatMXN(plan.price)}</span>
+                    </div>
+                    <span class="text-[10px] text-nova-muted block mt-0.5">${plan.features.join(' • ')}</span>
+                </div>
+
+                <div class="space-y-1.5">
+                    <span class="text-[10px] uppercase tracking-wider text-nova-muted block font-semibold">¿Quieres agregar algún extra?</span>
+                    ${checkboxesHtml}
+                </div>
+
+                <div class="pt-2 border-t border-nova-border flex items-baseline justify-between">
+                    <span class="text-[11px] text-nova-muted">Total estimado:</span>
+                    <span class="font-display font-bold text-base text-nova-white">${formatMXN(total)}</span>
+                </div>
+
+                <div class="grid grid-cols-1 gap-1.5 pt-1">
+                    <button type="button" onclick="confirmBotAndSendWhatsApp()" class="w-full py-2.5 px-3 rounded-xl bg-nova-white text-nova-bg font-display font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-glow-white">
+                        <span>📲 Sí, pedir por WhatsApp (${formatMXN(total)})</span>
+                    </button>
+                    <button type="button" onclick="confirmBotAndLoadConfigurator()" class="w-full py-2 px-3 rounded-xl bg-nova-bg hover:bg-nova-border text-nova-body hover:text-nova-white border border-nova-border font-semibold text-[11px] transition-colors">
+                        Pasar esta selección al cotizador
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        let lastBotExplanation = '';
+        function toggleBotCardAddon(containerId, addonId) {
+            if (state.botRec.addons.has(addonId)) {
+                state.botRec.addons.delete(addonId);
+            } else {
+                state.botRec.addons.add(addonId);
+            }
+            const plan = NOVACORE_PLANS[state.botRec.planId];
+            renderBotCardContent(containerId, `Recomendación activa: <strong class="text-nova-white">${plan.name}</strong>`);
+        }
+
+        function confirmBotAndLoadConfigurator() {
+            state.selectedAddons = new Set(state.botRec.addons);
+            selectPlan(state.botRec.planId, true);
+            toggleBotChat(false);
+            showToast('¡Recomendación aplicada a tu cotización!');
+            document.getElementById('resumen-cotizacion').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function confirmBotAndSendWhatsApp() {
+            state.selectedAddons = new Set(state.botRec.addons);
+            selectPlan(state.botRec.planId, true);
+            sendOrderViaWhatsApp();
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            mountVectorLogos();
+            initBotGreeting();
+            selectPlan(2, true);
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
